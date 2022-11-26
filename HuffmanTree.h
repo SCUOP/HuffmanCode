@@ -1,12 +1,18 @@
 #include <iostream>
 #include <deque>
+#include <queue>
 #include <fstream>
 #include <string>
+#include <algorithm>
+#include <functional>
 
 using namespace std;
 
 class HuffmanTree
 {
+public:
+    static bool cmp(HuffmanTree *t1, HuffmanTree *t2) { return t1->root->frequency > t2->root->frequency; }
+
 private:
     // Huffman树节点
     struct HuffmanNode
@@ -20,12 +26,14 @@ private:
             : frequency(f), left(l), right(r) {}
         ~HuffmanNode(){};
     };
-    HuffmanNode *root;         //根节点
-    deque<HuffmanTree> forest; //森林
-    string HuffmanCode[130];   //记录某字符的哈夫曼编码如 A的ASCII码为65, 哈夫曼编码101 则HuffmanCode[65]=101
+    HuffmanNode *root;                                                           //根节点
+    priority_queue<HuffmanTree *, vector<HuffmanTree *>, decltype(&cmp)> forest; //森林
+    string HuffmanCode[130];                                                     //记录某字符的哈夫曼编码如 A的ASCII码为65, 哈夫曼编码101 则HuffmanCode[65]=101
 
 public:
+    HuffmanTree(){};
     HuffmanTree(string in_filename); // 生成哈夫曼树,并调用orderHuffmanTree写入HuffmanCode
+    void func(HuffmanNode *cur, string t);
 
     void compress(string in_filename, string out_filename);   //通过HuffmanCode编码并输出至out_filename
     void decompress(string in_filename, string out_filename); //通过HuffmanCode译码并输出至out_filename
