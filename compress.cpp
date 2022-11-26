@@ -8,28 +8,31 @@ void HuffmanTree::compress(string in_filename, string out_filename)
     infile.open(in_filename, ios::in);
     if (!infile.is_open())
     {
-        cout << "读取文件失败" << endl;
+        throw "Open infile failed, please enter correct filepath.\n";
         return;
     }
-    char data[101];
-    int i = 0;
-    while (!infile.eof())
-        infile >> data[i++];
+    string data;
+    while (1)
+    {
+        char t;
+        infile.get(t);
+        if (infile.eof())
+            break;
+        data.push_back(t);
+    }
     infile.close();
-    i--;
-    int max_Index = i;
 
     fstream outfile;
     outfile.open(out_filename, ios::out);
     if (!outfile.is_open())
     {
-        cout << "读取文件失败" << endl;
+        throw "Open outfile failed, please enter correct filepath.\n";
         return;
     }
     string Str;
-    for (int index = 0; index <= max_Index; index++)
+    for (auto t : data)
     {
-        Str += HuffmanCode[data[index]];
+        Str += HuffmanCode[t];
     }
     outfile << Str << endl;
     outfile.close();

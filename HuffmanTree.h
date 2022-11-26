@@ -11,7 +11,10 @@ using namespace std;
 class HuffmanTree
 {
 public:
-    static bool cmp(HuffmanTree *t1, HuffmanTree *t2) { return t1->root->frequency > t2->root->frequency; }
+    bool operator<(const HuffmanTree *t1)
+    {
+        return t1->root->frequency < this->root->frequency;
+    }
 
 private:
     // Huffman树节点
@@ -26,9 +29,9 @@ private:
             : frequency(f), left(l), right(r) {}
         ~HuffmanNode(){};
     };
-    HuffmanNode *root;                                                           //根节点
-    priority_queue<HuffmanTree *, vector<HuffmanTree *>, decltype(&cmp)> forest; //森林
-    string HuffmanCode[130];                                                     //记录某字符的哈夫曼编码如 A的ASCII码为65, 哈夫曼编码101 则HuffmanCode[65]=101
+    HuffmanNode *root;                    //根节点
+    priority_queue<HuffmanTree *> forest; //森林
+    string HuffmanCode[130];              //记录某字符的哈夫曼编码如 A的ASCII码为65, 哈夫曼编码101 则HuffmanCode[65]=101
 
 public:
     HuffmanTree(){};

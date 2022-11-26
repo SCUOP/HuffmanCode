@@ -19,17 +19,19 @@ void HuffmanTree::func(HuffmanNode *cur, string t)
 
 HuffmanTree::HuffmanTree(string in_filename)
 {
-    ifstream infile(in_filename);
-    if (infile.fail())
+    fstream infile(in_filename, ios::in);
+    if (!infile.is_open())
     {
-        cout << "open file failed" << endl;
+        throw "Open file failed, please enter correct filepath.\n";
         return;
     }
     string s;
-    while (!infile.eof())
+    while (1)
     {
         char t;
         infile.get(t);
+        if (infile.eof())
+            break;
         s.push_back(t);
     }
     infile.close();

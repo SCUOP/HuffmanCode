@@ -8,32 +8,34 @@ void HuffmanTree::decompress(string in_filename, string out_filename)
     infile.open(in_filename, ios::in);
     if (!infile.is_open())
     {
-        cout << "读取文件失败" << endl;
+        throw "Open infile failed, please enter correct filepath.\n";
         return;
     }
-    char data[1001];
-    int i = 0;
-    while (!infile.eof())
-        infile >> data[i++];
+    string data;
+    while (true)
+    {
+        char t;
+        infile.get(t);
+        if (infile.eof())
+            break;
+        data.push_back(t);
+    }
     infile.close();
-    i--;
-    int max_Index = i;
 
     fstream outfile;
     outfile.open(out_filename, ios::out);
     if (!outfile.is_open())
     {
-        cout << "读取文件失败" << endl;
+        throw "Open outfile failed, please enter correct filepath.\n";
         return;
     }
     string Str;
-    int index = 0;
     HuffmanNode *node = root;
-    while (index <= max_Index)
+    for (auto t : data)
     {
-        while (node->left != NULL || node->right != NULL)
+        if (node->left != NULL || node->right != NULL)
         {
-            if (data[index++] == 0)
+            if (t == '0')
             {
                 node = node->left;
             }
@@ -42,7 +44,11 @@ void HuffmanTree::decompress(string in_filename, string out_filename)
                 node = node->right;
             }
         }
-        Str += node->ch;
+        if (node->left == NULL && node->right == NULL)
+        {
+            Str += node->ch;
+            node = root;
+        }
     }
     outfile << Str << endl;
     outfile.close();
